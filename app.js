@@ -24,6 +24,8 @@ db.once('open', () => {
 })
 
 // 路由清單
+
+// 顯示全部todo
 app.get('/', (req, res) => {
   Todo.find()
     .lean()
@@ -31,10 +33,12 @@ app.get('/', (req, res) => {
     .catch(error => error(error))
 })
 
+// 顯示新增todo的頁面
 app.get('/todos/new', (req, res) => {
   return res.render('new')
 })
 
+// 新增todo功能
 app.post('/todos', (req, res) => {
   const name = req.body.name
   return Todo.create({ name })
@@ -42,6 +46,7 @@ app.post('/todos', (req, res) => {
     .catch(error => console.log(error))
 })
 
+// 顯示單一todo的畫面
 app.get('/todos/:id', (req, res) => {
   const id = req.params.id
   return Todo.findById(id)
@@ -59,19 +64,21 @@ app.get('/todos/:id/edit', (req, res) => {
     .catch(error => console.log(error))
 })
 
-// 
+// 編輯todo功能
 app.post('/todos/:id/edit', (req, res) => {
   const id = req.params.id
-  const name = req.body.name
+  const {name, isDone} = req.body
   return Todo.findById(id)
     .then(todo => {
       todo.name = name
+      todo.isDone = isDone === 'on' // 後面的isDone如果是true，則todo.isDone就為true
       return todo.save()
     })
     .then(() => res.redirect(`/todos/${id}`))
     .catch(error => console.log(error))
 })
 
+// 刪除todo功能
 app.post(('/todos/:id/delete'), (req, res) => {
   const id = req.params.id
   return Todo.findById(id)
