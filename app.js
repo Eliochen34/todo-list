@@ -29,6 +29,7 @@ db.once('open', () => {
 app.get('/', (req, res) => {
   Todo.find()
     .lean()
+    .sort({ name: 'asc'}) // 反序為desc，name可以置換成欲排序的對象
     .then(todos => res.render('index', { todos }))
     .catch(error => error(error))
 })
