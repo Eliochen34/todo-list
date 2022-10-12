@@ -26,71 +26,66 @@ db.once('open', () => {
 const methodOverride = require('method-override')
 app.use(methodOverride('_method'))
 
+// 掛載路由器
+const routes = require('./routes')
+app.use(routes)
+
 
 // 路由清單
 
-// 顯示全部todo
-app.get('/', (req, res) => {
-  Todo.find()
-    .lean()
-    .sort({ name: 'asc'}) // 反序為desc，name可以置換成欲排序的對象
-    .then(todos => res.render('index', { todos }))
-    .catch(error => error(error))
-})
+// // 顯示新增todo的頁面
+// app.get('/todos/new', (req, res) => {
+//   return res.render('new')
+// })
 
-// 顯示新增todo的頁面
-app.get('/todos/new', (req, res) => {
-  return res.render('new')
-})
+// // 新增todo功能
+// app.post('/todos', (req, res) => {
+//   const name = req.body.name
+//   return Todo.create({ name })
+//     .then(() => res.redirect('/'))
+//     .catch(error => console.log(error))
+// })
 
-// 新增todo功能
-app.post('/todos', (req, res) => {
-  const name = req.body.name
-  return Todo.create({ name })
-    .then(() => res.redirect('/'))
-    .catch(error => console.log(error))
-})
+// // 顯示單一todo的畫面
+// app.get('/todos/:id', (req, res) => {
+//   const id = req.params.id
+//   return Todo.findById(id)
+//     .lean()
+//     .then((todo) => res.render('detail', { todo }))
+//     .catch(error => console.log(error))
+// })
 
-// 顯示單一todo的畫面
-app.get('/todos/:id', (req, res) => {
-  const id = req.params.id
-  return Todo.findById(id)
-    .lean()
-    .then((todo) => res.render('detail', { todo }))
-    .catch(error => console.log(error))
-})
+// // 顯示edit畫面
+// app.get('/todos/:id/edit', (req, res) => {
+//   const id = req.params.id
+//   return Todo.findById(id)
+//     .lean()
+//     .then((todo) => res.render('edit', { todo }))
+//     .catch(error => console.log(error))
+// })
 
-// 顯示edit畫面
-app.get('/todos/:id/edit', (req, res) => {
-  const id = req.params.id
-  return Todo.findById(id)
-    .lean()
-    .then((todo) => res.render('edit', { todo }))
-    .catch(error => console.log(error))
-})
+// // 編輯todo功能
+// app.put('/todos/:id', (req, res) => {
+//   const id = req.params.id
+//   const {name, isDone} = req.body
+//   return Todo.findById(id)
+//     .then(todo => {
+//       todo.name = name
+//       todo.isDone = isDone === 'on' // 後面的isDone如果是true，則todo.isDone就為true
+//       return todo.save()
+//     })
+//     .then(() => res.redirect(`/todos/${id}`))
+//     .catch(error => console.log(error))
+// })
 
-// 編輯todo功能
-app.put('/todos/:id', (req, res) => {
-  const id = req.params.id
-  const {name, isDone} = req.body
-  return Todo.findById(id)
-    .then(todo => {
-      todo.name = name
-      todo.isDone = isDone === 'on' // 後面的isDone如果是true，則todo.isDone就為true
-      return todo.save()
-    })
-    .then(() => res.redirect(`/todos/${id}`))
-    .catch(error => console.log(error))
-})
-
-// 刪除todo功能
-app.delete(('/todos/:id'), (req, res) => {
-  const id = req.params.id
-  return Todo.findById(id)
-    .then(todo => todo.remove())
-    .then(() => res.redirect('/'))
-    .catch(error => console.log(error))
-})
+// // 刪除todo功能
+// app.delete(('/todos/:id'), (req, res) => {
+//   const id = req.params.id
+//   return Todo.findById(id)
+//     .then(todo => todo.remove())
+//     .then(() => res.redirect('/'))
+//     .catch(error => console.log(error))
+// })
 
 app.listen(port, () => {
   console.log('This is to do list.')
