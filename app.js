@@ -6,6 +6,7 @@ const session = require('express-session')
 
 const routes = require('./routes') // 掛載路由器
 
+// 載入設定檔，要寫在express-session之後
 const usePassport = require('./config/passport')
 require('./config/mongoose')
 
@@ -22,7 +23,7 @@ app.use(session({
 }))
 app.use(bodyParser.urlencoded({ extended: true })) // 規定每一筆請求都要經過body-parser進行前置處理
 app.use(methodOverride('_method'))
-
+// 呼叫Passport函式並傳入app，要寫在路由之前
 usePassport(app)
 
 app.use(routes)
