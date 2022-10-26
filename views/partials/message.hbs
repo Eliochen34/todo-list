@@ -1,5 +1,6 @@
 
 {{#if errors}}
+  {{!-- 由於errors是陣列，所以要用迴圈來印出每個error的內容 --}}
   {{#each errors}}
     <div class="alert alert-danger alert-dismissible fade show" role="alert">
       {{ this.message }}
